@@ -42,14 +42,14 @@ describe 'Show page' do
   it 'renders the active status if the user is inactive' do
     @student.active = false
     @student.save
-    visit students_path(@student)
+    visit student_path(@student)
     expect(page).to have_content("This student is currently inactive.")
   end
 
   it 'renders the active status if the user is active' do
     @student.active = true
     @student.save
-    visit students_path(@student)
+    visit student_path(@student)
     expect(page).to have_content("This student is currently active.")
   end
 end
@@ -60,6 +60,8 @@ describe 'Activate page' do
   end
 
   it "Should mark an inactive student as active" do
+    @student.active = false
+    @student.save
     visit activate_students_path(@student)
     @student.reload
     expect(@student.active).to eq(true)
@@ -83,6 +85,7 @@ describe 'linking from the index page to the show page' do
   it 'index page links to post page' do
     @student = Student.create!(first_name: "Daenerys", last_name: "Targaryen")
     visit students_path
-    expect(page).to have_link(@student.to_s, href: students_path(@student))
+    expect(page).to have_content("Daenerys Targaryen")
+    expect(page).to have_link("Daenerys Targaryen")
   end
 end
